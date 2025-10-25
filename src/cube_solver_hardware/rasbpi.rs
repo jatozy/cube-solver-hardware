@@ -1,0 +1,37 @@
+use rppal::gpio::Gpio;
+
+const GPIO_TURNTABLE_MOTOR_LEFT: u8 = 27;
+const GPIO_TURNTABLE_MOTOR_RIGHT: u8 = 22;
+
+pub(crate) struct Rasbpi {
+    gpio_motor_left_channel: rppal::gpio::OutputPin,
+    gpio_motor_right_channel: rppal::gpio::OutputPin,
+}
+
+impl Rasbpi {
+    pub fn new() -> Self {
+        let gpio = Gpio::new().unwrap();
+
+        Rasbpi {
+            gpio_motor_left_channel: gpio.get(GPIO_TURNTABLE_MOTOR_LEFT).unwrap().into_output(),
+            gpio_motor_right_channel: gpio.get(GPIO_TURNTABLE_MOTOR_RIGHT).unwrap().into_output(),
+        }
+    }
+
+    pub fn rotate_gpio_motor_left(&mut self) {
+        self.gpio_motor_right_channel.set_low();
+        self.wait_for_short_time();
+        self.gpio_motor_left_channel.set_high();
+    }
+
+    pub fn rotate_gpio_motor_right(&mut self) {
+        self.gpio_motor_left_channel.set_low();
+        self.wait_for_short_time();
+        self.gpio_motor_right_channel.set_high();
+    }
+
+    fn wait_for_short_time(&self) {
+        //Wait a short time to be shure, that the hardware has processed the changes.
+        std::thread::sleep(std::time::Duration::from_millis(10));
+    }
+}
