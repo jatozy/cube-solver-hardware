@@ -18,17 +18,17 @@ impl Controller {
             while let Ok(cmd) = command_receiver.recv() {
                 match cmd.command {
                     Commands::RotateTurntable90DegreeClockwise => {
-                        hardware.rotate_gpio_motor_right();
-                        std::thread::sleep(std::time::Duration::from_millis(500));
-                        hardware.stop_gpio_motor();
-                        turntable_angle = (turntable_angle + 90) % 360;
+                        execute_rotate_turntable_90_degree_clockwise(
+                            &mut hardware,
+                            &mut turntable_angle,
+                        );
                         cmd.result_back_channel.send(()).unwrap();
                     }
                     Commands::RotateTurntable90DegreeCounterClockwise => {
-                        hardware.rotate_gpio_motor_left();
-                        std::thread::sleep(std::time::Duration::from_millis(500));
-                        hardware.stop_gpio_motor();
-                        turntable_angle = (turntable_angle + 270) % 360;
+                        execute_rotate_turntable_90_degree_counter_clockwise(
+                            &mut hardware,
+                            &mut turntable_angle,
+                        );
                         cmd.result_back_channel.send(()).unwrap();
                     }
                 }
@@ -61,4 +61,18 @@ impl Controller {
             .unwrap();
         result_receiver
     }
+}
+
+fn execute_rotate_turntable_90_degree_clockwise(hardware: &mut Hardware, angle: &mut u16) {
+    hardware.rotate_gpio_motor_right();
+    std::thread::sleep(std::time::Duration::from_millis(250));
+    hardware.stop_gpio_motor();
+    *angle = (*angle + 90) % 360;
+}
+
+fn execute_rotate_turntable_90_degree_counter_clockwise(hardware: &mut Hardware, angle: &mut u16) {
+    hardware.rotate_gpio_motor_left();
+    std::thread::sleep(std::time::Duration::from_millis(250));
+    hardware.stop_gpio_motor();
+    *angle = (*angle + 270) % 360;
 }
