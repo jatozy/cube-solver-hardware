@@ -1,2 +1,1 @@
-pub(crate) mod command;
-pub(crate) mod rasbpi;
+pub(crate) mod hardware;

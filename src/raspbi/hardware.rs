@@ -30,6 +30,11 @@ impl Hardware {
         self.gpio_motor_right_channel.set_high();
     }
 
+    pub fn stop_gpio_motor(&mut self) {
+        self.gpio_motor_left_channel.set_low();
+        self.gpio_motor_right_channel.set_low();
+    }
+
     fn wait_for_short_time(&self) {
         //Wait a short time to be shure, that the hardware has processed the changes.
         std::thread::sleep(std::time::Duration::from_millis(10));
