@@ -3,16 +3,16 @@ use rppal::gpio::Gpio;
 const GPIO_TURNTABLE_MOTOR_LEFT: u8 = 27;
 const GPIO_TURNTABLE_MOTOR_RIGHT: u8 = 22;
 
-pub(crate) struct Rasbpi {
+pub(crate) struct Hardware {
     gpio_motor_left_channel: rppal::gpio::OutputPin,
     gpio_motor_right_channel: rppal::gpio::OutputPin,
 }
 
-impl Rasbpi {
+impl Hardware {
     pub fn new() -> Self {
         let gpio = Gpio::new().unwrap();
 
-        Rasbpi {
+        Hardware {
             gpio_motor_left_channel: gpio.get(GPIO_TURNTABLE_MOTOR_LEFT).unwrap().into_output(),
             gpio_motor_right_channel: gpio.get(GPIO_TURNTABLE_MOTOR_RIGHT).unwrap().into_output(),
         }
