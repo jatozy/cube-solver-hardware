@@ -4,3 +4,5 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+rppal = { version = "0.22.1", features = ["hal"] }
+pca9685-rppal = "0.1.0"
