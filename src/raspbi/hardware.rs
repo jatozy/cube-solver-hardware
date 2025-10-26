@@ -1,7 +1,7 @@
 use rppal::gpio::Gpio;
 
-const GPIO_TURNTABLE_MOTOR_LEFT: u8 = 27;
-const GPIO_TURNTABLE_MOTOR_RIGHT: u8 = 22;
+const GPIO_TURNTABLE_MOTOR_LEFT: u8 = 5;
+const GPIO_TURNTABLE_MOTOR_RIGHT: u8 = 6;
 
 pub(crate) struct Hardware {
     gpio_motor_left_channel: rppal::gpio::OutputPin,

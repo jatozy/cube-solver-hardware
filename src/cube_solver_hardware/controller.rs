@@ -19,14 +19,14 @@ impl Controller {
                 match cmd.command {
                     Commands::RotateTurntable90DegreeClockwise => {
                         hardware.rotate_gpio_motor_right();
-                        std::thread::sleep(std::time::Duration::from_millis(500));
+                        std::thread::sleep(std::time::Duration::from_millis(250));
                         hardware.stop_gpio_motor();
                         turntable_angle = (turntable_angle + 90) % 360;
                         cmd.result_back_channel.send(()).unwrap();
                     }
                     Commands::RotateTurntable90DegreeCounterClockwise => {
                         hardware.rotate_gpio_motor_left();
-                        std::thread::sleep(std::time::Duration::from_millis(500));
+                        std::thread::sleep(std::time::Duration::from_millis(250));
                         hardware.stop_gpio_motor();
                         turntable_angle = (turntable_angle + 270) % 360;
                         cmd.result_back_channel.send(()).unwrap();
