@@ -103,12 +103,22 @@ fn execute_rotate_turntable_90_degree_counter_clockwise(hardware: &mut Hardware,
 
 fn execute_move_carriage_to_front(hardware: &mut Hardware) {
     hardware.move_carriage_forward();
-    std::thread::sleep(std::time::Duration::from_secs(2));
+    loop {
+        if hardware.is_carriage_at_front_position() {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    }
     hardware.stop_carriage();
 }
 
 fn execute_move_carriage_to_back(hardware: &mut Hardware) {
     hardware.move_carriage_backward();
-    std::thread::sleep(std::time::Duration::from_secs(2));
+    loop {
+        if hardware.is_carriage_at_back_position() {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    }
     hardware.stop_carriage();
 }
