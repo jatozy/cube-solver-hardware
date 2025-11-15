@@ -10,6 +10,9 @@ pub(crate) enum Commands {
     RotateTurntable90DegreeCounterClockwise,
     MoveCarriageToFront,
     MoveCarriageToBack,
+    RotateClawLeftPosition,
+    RotateClawMiddlePosition,
+    RotateClawRightPosition,
 }
 
 impl Command {

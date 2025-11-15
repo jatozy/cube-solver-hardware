@@ -39,6 +39,18 @@ impl Controller {
                         execute_move_carriage_to_back(&mut hardware);
                         cmd.result_back_channel.send(()).unwrap();
                     }
+                    Commands::RotateClawLeftPosition => {
+                        execute_rotate_claw_to_left_position(&mut hardware);
+                        cmd.result_back_channel.send(()).unwrap();
+                    }
+                    Commands::RotateClawMiddlePosition => {
+                        execute_rotate_claw_to_middle_position(&mut hardware);
+                        cmd.result_back_channel.send(()).unwrap();
+                    }
+                    Commands::RotateClawRightPosition => {
+                        execute_rotate_claw_to_right_position(&mut hardware);
+                        cmd.result_back_channel.send(()).unwrap();
+                    }
                 }
             }
         });
@@ -85,6 +97,39 @@ impl Controller {
             .unwrap();
         result_receiver
     }
+
+    pub fn rotate_claw_left_position(&mut self) -> mpsc::Receiver<()> {
+        let (result_sender, result_receiver) = mpsc::channel();
+        self.command_sender
+            .send(Command::new(
+                Commands::RotateClawLeftPosition,
+                result_sender,
+            ))
+            .unwrap();
+        result_receiver
+    }
+
+    pub fn rotate_claw_middle_position(&mut self) -> mpsc::Receiver<()> {
+        let (result_sender, result_receiver) = mpsc::channel();
+        self.command_sender
+            .send(Command::new(
+                Commands::RotateClawMiddlePosition,
+                result_sender,
+            ))
+            .unwrap();
+        result_receiver
+    }
+
+    pub fn rotate_claw_right_position(&mut self) -> mpsc::Receiver<()> {
+        let (result_sender, result_receiver) = mpsc::channel();
+        self.command_sender
+            .send(Command::new(
+                Commands::RotateClawRightPosition,
+                result_sender,
+            ))
+            .unwrap();
+        result_receiver
+    }
 }
 
 fn execute_rotate_turntable_90_degree_clockwise(hardware: &mut Hardware, angle: &mut u16) {
@@ -121,4 +166,16 @@ fn execute_move_carriage_to_back(hardware: &mut Hardware) {
         std::thread::sleep(std::time::Duration::from_millis(50));
     }
     hardware.stop_carriage();
+}
+
+fn execute_rotate_claw_to_left_position(hardware: &mut Hardware) {
+    hardware.rotate_claw_to_angle(150);
+}
+
+fn execute_rotate_claw_to_middle_position(hardware: &mut Hardware) {
+    hardware.rotate_claw_to_angle(350);
+}
+
+fn execute_rotate_claw_to_right_position(hardware: &mut Hardware) {
+    hardware.rotate_claw_to_angle(650);
 }
