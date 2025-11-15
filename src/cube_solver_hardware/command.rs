@@ -8,6 +8,8 @@ pub(crate) struct Command {
 pub(crate) enum Commands {
     RotateTurntable90DegreeClockwise,
     RotateTurntable90DegreeCounterClockwise,
+    MoveCarriageToFront,
+    MoveCarriageToBack,
 }
 
 impl Command {

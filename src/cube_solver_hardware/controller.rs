@@ -31,6 +31,14 @@ impl Controller {
                         );
                         cmd.result_back_channel.send(()).unwrap();
                     }
+                    Commands::MoveCarriageToFront => {
+                        execute_move_carriage_to_front(&mut hardware);
+                        cmd.result_back_channel.send(()).unwrap();
+                    }
+                    Commands::MoveCarriageToBack => {
+                        execute_move_carriage_to_back(&mut hardware);
+                        cmd.result_back_channel.send(()).unwrap();
+                    }
                 }
             }
         });
@@ -61,18 +69,56 @@ impl Controller {
             .unwrap();
         result_receiver
     }
+
+    pub fn move_carriage_to_front(&mut self) -> mpsc::Receiver<()> {
+        let (result_sender, result_receiver) = mpsc::channel();
+        self.command_sender
+            .send(Command::new(Commands::MoveCarriageToFront, result_sender))
+            .unwrap();
+        result_receiver
+    }
+
+    pub fn move_carriage_to_back(&mut self) -> mpsc::Receiver<()> {
+        let (result_sender, result_receiver) = mpsc::channel();
+        self.command_sender
+            .send(Command::new(Commands::MoveCarriageToBack, result_sender))
+            .unwrap();
+        result_receiver
+    }
 }
 
 fn execute_rotate_turntable_90_degree_clockwise(hardware: &mut Hardware, angle: &mut u16) {
-    hardware.rotate_gpio_motor_right();
+    hardware.rotate_turntable_right();
     std::thread::sleep(std::time::Duration::from_millis(250));
-    hardware.stop_gpio_motor();
+    hardware.stop_turntable();
     *angle = (*angle + 90) % 360;
 }
 
 fn execute_rotate_turntable_90_degree_counter_clockwise(hardware: &mut Hardware, angle: &mut u16) {
-    hardware.rotate_gpio_motor_left();
+    hardware.rotate_turntable_left();
     std::thread::sleep(std::time::Duration::from_millis(250));
-    hardware.stop_gpio_motor();
+    hardware.stop_turntable();
     *angle = (*angle + 270) % 360;
+}
+
+fn execute_move_carriage_to_front(hardware: &mut Hardware) {
+    hardware.move_carriage_forward();
+    loop {
+        if hardware.is_carriage_at_front_position() {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    }
+    hardware.stop_carriage();
+}
+
+fn execute_move_carriage_to_back(hardware: &mut Hardware) {
+    hardware.move_carriage_backward();
+    loop {
+        if hardware.is_carriage_at_back_position() {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    }
+    hardware.stop_carriage();
 }
