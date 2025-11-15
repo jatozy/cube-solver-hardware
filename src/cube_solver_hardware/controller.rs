@@ -169,7 +169,7 @@ fn execute_move_carriage_to_back(hardware: &mut Hardware) {
 }
 
 fn execute_rotate_claw_to_left_position(hardware: &mut Hardware) {
-    hardware.rotate_claw_to_angle(150);
+    hardware.rotate_claw_to_angle(250);
 }
 
 fn execute_rotate_claw_to_middle_position(hardware: &mut Hardware) {
@@ -177,5 +177,5 @@ fn execute_rotate_claw_to_middle_position(hardware: &mut Hardware) {
 }
 
 fn execute_rotate_claw_to_right_position(hardware: &mut Hardware) {
-    hardware.rotate_claw_to_angle(650);
+    hardware.rotate_claw_to_angle(550);
 }
