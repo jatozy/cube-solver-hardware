@@ -122,3 +122,17 @@ fn execute_move_carriage_to_back(hardware: &mut Hardware) {
     }
     hardware.stop_carriage();
 }
+
+fn execute_rotate_turntable_90_degree_clockwise(hardware: &mut Hardware, angle: &mut u16) {
+    hardware.rotate_gpio_motor_right();
+    std::thread::sleep(std::time::Duration::from_millis(250));
+    hardware.stop_gpio_motor();
+    *angle = (*angle + 90) % 360;
+}
+
+fn execute_rotate_turntable_90_degree_counter_clockwise(hardware: &mut Hardware, angle: &mut u16) {
+    hardware.rotate_gpio_motor_left();
+    std::thread::sleep(std::time::Duration::from_millis(250));
+    hardware.stop_gpio_motor();
+    *angle = (*angle + 270) % 360;
+}
