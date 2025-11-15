@@ -177,5 +177,5 @@ fn execute_rotate_claw_to_middle_position(hardware: &mut Hardware) {
 }
 
 fn execute_rotate_claw_to_right_position(hardware: &mut Hardware) {
-    hardware.rotate_claw_to_angle(450);
+    hardware.rotate_claw_to_angle(500);
 }
